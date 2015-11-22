@@ -1,0 +1,139 @@
+;; Define the text-edit-window :Text-Edit-Window-1
+ 
+(cl:in-package :wrm)
+ 
+(cl:defvar *text-edit-window-1* cl:nil)
+ 
+;; Return the window, creating it the first time or when it's closed.
+;; Use only this function if you need only one instance.
+(cl:defun text-edit-window-1 ()
+   (cl:if (cg:windowp *text-edit-window-1*) *text-edit-window-1* 
+      (cl:setq *text-edit-window-1* (make-text-edit-window-1))))
+ 
+;; Create an instance of the window.
+;; Use this if you need more than one instance.
+(cl:defun make-text-edit-window-1 (cl:&key 
+                                (parent cg:*lisp-main-window*) 
+                                (window-interior 
+                                   (cg:make-box 312 63 858 556))
+                                (name :text-edit-window-1) 
+                                (title "Text Edit Window 1"))
+   (cl:setq cg:*loaded-but-uncreated-windows* 
+      (cl:delete 'text-edit-window-1 
+         cg:*loaded-but-uncreated-windows*))
+   (cl:let (cg:window-0 cg:window-1 cg:window-2 cg:window-3 
+         cg:window-4)
+      (cl:setq cg:window-0 
+         (cg:open-stream 'cg:text-edit-window 
+            parent :io 
+            :name name 
+            :title title 
+            :font (cg:make-font-ex :modern :courier 13 cl:nil) 
+            :window-state :shrunk 
+            :window-border :frame 
+            :left-attachment cl:nil 
+            :top-attachment cl:nil 
+            :right-attachment cl:nil 
+            :bottom-attachment cl:nil 
+            :user-movable cl:t 
+            :user-resizable cl:t 
+            :user-closable cl:t 
+            :user-shrinkable cl:t 
+            :user-scrollable cl:t 
+            :overlapped cl:nil 
+            :background-color cl:nil 
+            :pop-up-p cl:nil 
+            :window-interior window-interior))
+      (cl:setf (cg:window-editable-p cg:window-0) cl:t)
+      (cl:setf (cl:getf (cg:stream-plist cg:window-0) :path) 
+         (cl:let* ((cl:pathname 
+                   (cl:load-time-value cl:*load-pathname*)))
+            (cl:if 
+               (cl:or (cl:not (cl:pathnamep cl:pathname)) 
+                  (cl:member (cl:pathname-type cl:pathname) 
+                     acl:*fsl-extensions* :test #'cl:string-equal))
+               "C:\\rz\\Simlab\\spl\\src\\DIALOG.BIL" 
+               (cl:namestring cl:pathname))))
+      (cl:setf (cl:getf (cg:stream-plist cg:window-0) :startup-state) 
+         cl:nil)
+      (cl:setf (cl:getf (cg:stream-plist cg:window-0) :top-level-p) 
+         cl:nil)
+      (cl:setf (cg:help-string cg:window-0) 
+         (cl:delete #\Newline cl:nil))
+      (cl:setf (cl:getf (cg:stream-plist cg:window-0) :package) :wrm)
+      (cl:setq cg:window-1 
+         (cg:open-dialog 
+            (cl:list 
+               (cg:make-dialog-item 
+                  :widget 'cg:lisp-text 
+                  :name :lisp-text-1 
+                  :title (cl:delete #\Newline "Lisp Text 1") 
+                  :value (cl:delete #\Newline "Lisp Text 1") 
+                  :box (cg:make-box 2 0 204 24) 
+                  :tabstop cl:t 
+                  :groupstart cl:t 
+                  :font (cg:make-font-ex cl:nil :courier 13 cl:nil))
+               (cg:make-dialog-item 
+                  :widget 'cg:button 
+                  :name :button-1 
+                  :title (cl:delete #\Newline "Button 1") 
+                  :box (cg:make-box 216 2 292 26) 
+                  :tabstop cl:nil 
+                  :groupstart cl:nil 
+                  :font (cg:make-font-ex cl:nil :arial 13 '(:bold)))
+               (cg:make-dialog-item 
+                  :widget 'cg:cancel-button 
+                  :name :cancel-button-1 
+                  :title (cl:delete #\Newline "Cancel Button 1") 
+                  :box (cg:make-box 298 2 411 34) 
+                  :tabstop cl:nil 
+                  :groupstart cl:nil 
+                  :set-value-fn 'cg:return-nil-from-pop-up-dialog 
+                  :font (cg:make-font-ex cl:nil :arial 13 '(:bold))))
+            'cg:toolbar cg:window-0 
+            :name :toolbar-1 
+            :title "Untitled.5" 
+            :font (cg:make-font :swiss :system 16 '(:bold)) 
+            :window-state :normal 
+            :window-border :plain 
+            :left-attachment :left 
+            :top-attachment :top 
+            :right-attachment :right 
+            :bottom-attachment :top 
+            :user-movable cl:nil 
+            :user-resizable cl:nil 
+            :user-closable cl:nil 
+            :user-shrinkable cl:nil 
+            :user-scrollable cl:nil 
+            :overlapped cl:nil 
+            :background-color cg:light-gray 
+            :pop-up-p cl:nil 
+            :window-interior (cg:make-box 3 3 543 38)))
+      (cl:setf (cg:window-editable-p cg:window-1) cl:t)
+      (cl:setf (cl:getf (cg:stream-plist cg:window-1) :path) 
+         (cl:let* ((cl:pathname 
+                   (cl:load-time-value cl:*load-pathname*)))
+            (cl:if 
+               (cl:or (cl:not (cl:pathnamep cl:pathname)) 
+                  (cl:member (cl:pathname-type cl:pathname) 
+                     acl:*fsl-extensions* :test #'cl:string-equal))
+               cl:nil (cl:namestring cl:pathname))))
+      (cl:setf (cl:getf (cg:stream-plist cg:window-1) :startup-state) 
+         cl:nil)
+      (cl:setf (cl:getf (cg:stream-plist cg:window-1) :top-level-p) 
+         cl:nil)
+      (cl:setf (cg:help-string cg:window-1) 
+         (cl:delete #\Newline cl:nil))
+      (cl:setf (cl:getf (cg:stream-plist cg:window-1) :package) cl:nil)
+      (cg:add-toolbar-to-window cg:window-0 cg:window-1)
+      (cl:setq cg:window-1 (cg:frame-child cg:window-0))
+      cl:nil
+      (cl:let* ((cg:box 
+                (cl:getf cg:*window-exteriors* 
+                   (cg:object-name cg:window-0))))
+         (cl:when cg:box 
+            (cg:reshape-window-exterior cg:window-0 cg:box)))
+      (cg:show-window cg:window-0 cl:nil)
+      cg:window-0))
+(cl:unless (cg:windowp *text-edit-window-1*) 
+   (cl:pushnew 'text-edit-window-1 cg:*loaded-but-uncreated-windows*))

@@ -1,0 +1,14 @@
+;;; -*- Mode:Lisp; Package: WRM; Base:10; Lowercase:T; Syntax:Common-Lisp -*-
+
+(in-package "WRM")
+
+(defprogram NONLINEAR3 (a)
+  (bind ((x nil (real-numbers))
+	 (y nil (real-numbers))
+	 (z nil (real-numbers)))
+    (constrain (x y z)
+	       ((eqn= (+ x y z) 6)
+		(eqn= (+ (* x x) (* y y) (* z z)) 14)
+		(eqn= (+ (* x x x x) (* y y y y) (* z z z z))
+		      98))
+      (print y))))

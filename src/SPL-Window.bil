@@ -1,0 +1,227 @@
+;; Define the text-edit-window :Spl-Window
+ 
+(in-package :common-lisp-user)
+ 
+(defvar *spl-window* nil)
+ 
+;; Return the window, creating it the first time or when it's closed.
+;; Use only this function if you need only one instance.
+(defun spl-window ()
+   (if (windowp *spl-window*) *spl-window* 
+      (setq *spl-window* (make-spl-window))))
+ 
+;; Create an instance of the window.
+;; Use this if you need more than one instance.
+(defun make-spl-window (&key (parent *screen*) 
+                        (window-interior (make-box 524 201 1250 819)) 
+                        (name :spl-window) (title "SPL-Window"))
+   (setq *loaded-but-uncreated-windows* 
+      (delete 'spl-window *loaded-but-uncreated-windows*))
+   (let (window-0 window-1 window-2 window-3 window-4)
+      (setq window-0 
+         (open-stream 'text-edit-window 
+            parent :io 
+            :name name 
+            :title title 
+            :font (make-font-ex :modern :courier 13 nil) 
+            :window-state :shrunk 
+            :window-border :frame 
+            :left-attachment nil 
+            :top-attachment nil 
+            :right-attachment nil 
+            :bottom-attachment nil 
+            :user-movable t 
+            :user-resizable t 
+            :user-closable t 
+            :user-shrinkable t 
+            :user-scrollable t 
+            :overlapped nil 
+            :background-color nil 
+            :pop-up-p nil 
+            :window-interior window-interior))
+      (setf (window-editable-p window-0) t)
+      (setf (getf (stream-plist window-0) :path) 
+         (let* ((pathname (load-time-value *load-pathname*)))
+            (if 
+               (or (not (pathnamep pathname)) 
+                  (member (pathname-type pathname) *fsl-extensions* 
+                     :test #'string-equal))
+               "C:\\rz\\Simlab\\spl\\src\\SPL-Window.bil" 
+               (namestring pathname))))
+      (setf (getf (stream-plist window-0) :startup-state) nil)
+      (setf (getf (stream-plist window-0) :top-level-p) t)
+      (setf (help-string window-0) (delete #\Newline nil))
+      (setf (getf (stream-plist window-0) :package) nil)
+      (add-common-status-bar-to-window window-0 :font 
+         (make-font-ex :swiss :arial 13 nil) :parts nil :min-height 0)
+      (setq window-1 
+         (open-dialog 
+            (list 
+               (make-dialog-item 
+                  :widget 'button 
+                  :name :button-1 
+                  :title (delete #\Newline "Reload") 
+                  :value t 
+                  :box (make-box 2 2 95 24) 
+                  :tabstop nil 
+                  :groupstart nil 
+                  :font (make-font-ex nil :arial 13 '(:bold))))
+            'toolbar window-0 
+            :name :toolbar-1 
+            :title "Untitled.5" 
+            :font (make-font :swiss :system 16 '(:bold)) 
+            :window-state :normal 
+            :window-border :plain 
+            :left-attachment :left 
+            :top-attachment :top 
+            :right-attachment :right 
+            :bottom-attachment :top 
+            :user-movable nil 
+            :user-resizable nil 
+            :user-closable nil 
+            :user-shrinkable nil 
+            :user-scrollable nil 
+            :overlapped nil 
+            :background-color light-gray 
+            :pop-up-p nil 
+            :window-interior (make-box 3 3 723 28)))
+      (setf (window-editable-p window-1) t)
+      (setf (getf (stream-plist window-1) :path) 
+         (let* ((pathname (load-time-value *load-pathname*)))
+            (if 
+               (or (not (pathnamep pathname)) 
+                  (member (pathname-type pathname) *fsl-extensions* 
+                     :test #'string-equal))
+               "C:\\rz\\Simlab\\spl\\src\\SPL-Window.bil" 
+               (namestring pathname))))
+      (setf (getf (stream-plist window-1) :startup-state) nil)
+      (setf (getf (stream-plist window-1) :top-level-p) nil)
+      (setf (help-string window-1) (delete #\Newline nil))
+      (setf (getf (stream-plist window-1) :package) nil)
+      (add-toolbar-to-window window-0 window-1)
+      (setq window-1 (frame-child window-0))
+      (progn
+         (set-window-menu window-0 
+            (let ((menu-bar (open-stream 'menu-bar *screen* :io)))
+               (add-to-menu menu-bar 
+                  (make-menu-item 
+                     :name :file-menu 
+                     :title "~File" 
+                     :value 
+                     (open-menu 
+                        (list 
+                           (make-menu-item 
+                              :name :new 
+                              :title "~New" 
+                              :value 'te:new-text-editor 
+                              :event-synonym '(control-key #\N) 
+                              :plist '(pc::id 26369))
+                           (make-menu-item 
+                              :name :open 
+                              :title "~Open" 
+                              :value 'te:open-text-file 
+                              :event-synonym '(control-key #\O) 
+                              :plist '(pc::id 26370))
+                           (make-menu-item 
+                              :name :save 
+                              :title "Save" 
+                              :value 'te:save-text-file 
+                              :event-synonym '(control-key #\S) 
+                              :plist '(pc::id 26371))
+                           (make-menu-item 
+                              :name :save-as 
+                              :title "Save ~As" 
+                              :value 'te:save-as-text-file 
+                              :plist '(pc::id 26372))
+                           (make-menu-item 
+                              :title "-" 
+                              :value "-" 
+                              :available-p nil)
+                           (make-menu-item 
+                              :name :exit 
+                              :title "E~xit" 
+                              :value 'user-close-top-level-window 
+                              :event-synonym '(alt-key pc:vk-f4) 
+                              :plist '(pc::id 26373)))
+                        'pop-up-menu *screen* 
+                        :name :default-menu 
+                        :selection-function 
+                        'funcall-menu-item-with-window)))
+               (add-to-menu menu-bar 
+                  (make-menu-item 
+                     :name :edit-menu 
+                     :title "~Edit" 
+                     :value 
+                     (open-menu 
+                        (list 
+                           (make-menu-item 
+                              :name :cut 
+                              :title "~Cut" 
+                              :value :cut 
+                              :event-synonym '(control-key #\X) 
+                              :plist '(pc::id 26625))
+                           (make-menu-item 
+                              :name :copy 
+                              :title "C~opy" 
+                              :value :copy 
+                              :event-synonym '(control-key #\C) 
+                              :plist '(pc::id 26626))
+                           (make-menu-item 
+                              :name :paste 
+                              :title "~Paste" 
+                              :value :paste 
+                              :event-synonym '(control-key #\V) 
+                              :plist '(pc::id 26627)))
+                        'pop-up-menu *screen* 
+                        :name :default-menu 
+                        :selection-function 
+                        'funcall-menu-item-with-window)))
+               (add-to-menu menu-bar 
+                  (make-menu-item 
+                     :name :transforms-menu 
+                     :title "~Transforms" 
+                     :value 
+                     (open-menu 
+                        (list 
+                           (make-menu-item 
+                              :name :cleanup-item 
+                              :title "Cleanup Program" 
+                              :value "Cleanup Program" 
+                              :plist '(pc::id 27137))
+                           (make-menu-item 
+                              :title "Realify" 
+                              :value "Realify" 
+                              :plist '(pc::id 27138))
+                           (make-menu-item 
+                              :title "Initial Value Problems" 
+                              :value 
+                              (open-menu 
+                                 (list 
+                                    (make-menu-item 
+                                       :title "Runge Kutta" 
+                                       :value "Runge Kutta" 
+                                       :plist '(pc::id 26881)))
+                                 'pop-up-menu *screen* 
+                                 :name :default-menu 
+                                 :selection-function 
+                                 'funcall-menu-item))
+                           (make-menu-item 
+                              :title "Boundary Value Problems" 
+                              :value "Boundary Value Problems" 
+                              :plist '(pc::id 27139))
+                           (make-menu-item 
+                              :title "Resolve Equations" 
+                              :value "Resolve Equations" 
+                              :plist '(pc::id 27140)))
+                        'pop-up-menu *screen* 
+                        :name :default-menu 
+                        :selection-function 'funcall-menu-item)))
+               menu-bar))
+         (reshape-window-interior window-0 window-interior))
+      (let* ((box (getf *window-exteriors* (object-name window-0))))
+         (when box (reshape-window-exterior window-0 box)))
+      (show-window window-0 nil)
+      window-0))
+
+(unless (windowp *spl-window*) 
+   (pushnew 'spl-window *loaded-but-uncreated-windows*))

@@ -1,0 +1,87 @@
+(let ((cg:menu-bar (cg:open-stream 'cg:menu-bar cg:*screen* :io)))
+   (cg:add-to-menu cg:menu-bar 
+      (cg:make-menu-item 
+         :name :file-menu 
+         :title "~File" 
+         :value 
+         (cg:open-menu 
+            (list 
+               (cg:make-menu-item 
+                  :name :new 
+                  :title "~New" 
+                  :value 'te:new-text-editor 
+                  :event-synonym '(cg:control-key #\N) 
+                  :plist '(pc::id 14081))
+               (cg:make-menu-item 
+                  :name :open 
+                  :title "~Open" 
+                  :value 'te:open-text-file 
+                  :event-synonym '(cg:control-key #\O) 
+                  :plist '(pc::id 14082))
+               (cg:make-menu-item 
+                  :name :save 
+                  :title "Save" 
+                  :value 'te:save-text-file 
+                  :event-synonym '(cg:control-key #\S) 
+                  :plist '(pc::id 14083))
+               (cg:make-menu-item 
+                  :name :save-as 
+                  :title "Save ~As" 
+                  :value 'te:save-as-text-file 
+                  :plist '(pc::id 14084))
+               (cg:make-menu-item 
+                  :title "-" 
+                  :available-p nil)
+               (cg:make-menu-item 
+                  :name :exit 
+                  :title "E~xit" 
+                  :value 'cg:user-close-top-level-window 
+                  :event-synonym '(cg:alt-key pc:vk-f4) 
+                  :plist '(pc::id 14085)))
+            'cg:pop-up-menu cg:*screen* 
+            :name :default-menu 
+            :selection-function 'cg:funcall-menu-item-with-window)))
+   (cg:add-to-menu cg:menu-bar 
+      (cg:make-menu-item 
+         :name :edit-menu 
+         :title "~Edit" 
+         :value 
+         (cg:open-menu 
+            (list 
+               (cg:make-menu-item 
+                  :name :cut 
+                  :title "~Cut" 
+                  :value :cut 
+                  :event-synonym '(cg:control-key #\X) 
+                  :plist '(pc::id 14337))
+               (cg:make-menu-item 
+                  :name :copy 
+                  :title "C~opy" 
+                  :value :copy 
+                  :event-synonym '(cg:control-key #\C) 
+                  :plist '(pc::id 14338))
+               (cg:make-menu-item 
+                  :name :paste 
+                  :title "~Paste" 
+                  :value :paste 
+                  :event-synonym '(cg:control-key #\V) 
+                  :plist '(pc::id 14339)))
+            'cg:pop-up-menu cg:*screen* 
+            :name :default-menu 
+            :selection-function 'cg:funcall-menu-item-with-window)))
+   (cg:add-to-menu cg:menu-bar 
+      (cg:make-menu-item 
+         :name :transform-menu 
+         :title "SPL Transforms" 
+         :value 
+         (cg:open-menu 
+            (list 
+               (cg:make-menu-item 
+                  :name :realify 
+                  :title "Realify" 
+                  :value :realify 
+                  :plist '(pc::id 14593)))
+            'cg:pop-up-menu cg:*screen* 
+            :name :default-menu 
+            :selection-function 'spl-transform)))
+   cg:menu-bar)
